@@ -63,6 +63,7 @@ soupsieve==2.5
 st-annotated-text==4.0.1
 statsmodels==0.14.0
 streamlit==1.29.0
+<<<<<<< HEAD
 streamlit-camera-input-live==0.2.0
 streamlit-card==1.0.0
 streamlit-embedcode==0.1.2
@@ -86,3 +87,6 @@ watchdog==3.0.0
 xyzservices==2023.10.1
 yarg==0.1.9
 zipp==3.17.0
+=======
+openpyxl==3.1.2
+>>>>>>> 281b3d01341956c3816ebdb302d2c77e6f10d77c
