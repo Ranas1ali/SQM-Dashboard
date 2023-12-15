@@ -5,6 +5,7 @@ import numpy as np
 from streamlit_extras.app_logo import add_logo
 from streamlit_extras.metric_cards import style_metric_cards
 from streamlit_folium import st_folium
+import math
 import folium
 import pydeck as pdk
 import os
@@ -236,6 +237,7 @@ st.plotly_chart(CS_trend_fig, use_container_width=True)
 
 st.markdown('##')
 st.markdown('##')
+st.markdown('##')
 #Graphs Section
 left_column_CS, right_column_CS = st.columns((2))
 #Voice per Regions bar graph 
@@ -262,7 +264,48 @@ with right_column_CS:
     fig_Voice_rat.update_traces(text= df_selection_CS["accesstype"], textposition = "outside")
     st.plotly_chart(fig_Voice_rat, use_container_width=True)
 
-#Map Section
+#map section 
+st.markdown('##')
+st.markdown('##')
+#map initialization
+m = folium.Map(location=[12.862807,30.217636], tiles='cartodbdark_matter', zoom_start=6,control_scale=True)
+
+#map data
+mapdataframe = df_selection_CS.groupby(by=['Region'])['Traffic_Erl'].sum()
+containerdataframe = pd.read_excel(df,'cs per region',usecols=['Region','latitude','longitude'])
+containerdataframe = containerdataframe.drop_duplicates('Region').reset_index(drop=True)
+map_df= pd.merge(mapdataframe,containerdataframe, on='Region')
+
+
+#adding circles
+for region in map_df.itertuples():
+    local_deformation = math.cos(region.latitude*math.pi/180)
+    folium.Circle(
+        location = [region.latitude, region.longitude],
+        popup= '%s (%.1f)' % (region.Region, region.Traffic_Erl),
+        radius= math.sqrt(region.Traffic_Erl)*30,
+        color='purple',
+        fill = True
+    ).add_to(m)
+
+#map title
+m.get_root().html.add_child(folium.Element("<h3 align='center' color='black'>Voice traffic Map per Region</h3>"))
+
+m
+
+
+
+#map_data = ("world", "canada") %>%
+#  group_by(group) %>%
+#  plot_geo(x = ~long, y = ~lat) %>%
+#  add_markers(size = I(1))
+
+
+#plot_geo(sample, locationmode='USA-states') %>%
+#add_markers(y=~lat, x=~long, hoverinfo="text",
+#    color=~Group, text=~Group, size=~Value, 
+#    marker=list(sizeref=0.1, sizemode="area")) %>%
+#  layout(title='plotly marker map', geo=x)
 #fig = px.scatter_geo(
  #   data_frame=df_selection_CS,
   #  color="Region",
@@ -274,13 +317,14 @@ with right_column_CS:
     #size="Traffic_Erl",  # <-- Set the column name for size
     #height=800,
 #)
-
 #st.plotly_chart(fig, use_container_width=True)
-
-
-#another map
-
+#print(map_df)
 #map_df = pd.read_excel(df,'cs per region',usecols=['Region','latitude','longitude'])
+#map_df = map_df.drop_duplicates()
+#point_size = df_selection_CS.groupby(by=['Region'])['Traffic_Erl'].sum()
+#map_df["Point_size"] = point_size.map('Region') 
+#map_df['Point_size'] = df_cs.groupby('Region')['Traffic_Erl'].sum().apply(lambda x: dict(zip(df_cs.Region, df_cs.Traffic_Erl)))
+#print(map_df)
 #point_size = df_selection_CS.groupby(by=['Region'])['Traffic_Erl'].sum().round(10)
 #map_df["point_size"]=point_size
 #st.map(map_df, color="#800080", size="point_size", use_container_width=True)
