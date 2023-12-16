@@ -268,30 +268,30 @@ with right_column_CS:
 st.markdown('##')
 st.markdown('##')
 #map initialization
-m = folium.Map(location=[12.862807,30.217636], tiles='cartodbdark_matter', zoom_start=6,control_scale=True)
+#m = folium.Map(location=[12.862807,30.217636], tiles='cartodbdark_matter', zoom_start=6,control_scale=True)
 
 #map data
-mapdataframe = df_selection_CS.groupby(by=['Region'])['Traffic_Erl'].sum()
-containerdataframe = pd.read_excel(df,'cs per region',usecols=['Region','latitude','longitude'])
-containerdataframe = containerdataframe.drop_duplicates('Region').reset_index(drop=True)
-map_df= pd.merge(mapdataframe,containerdataframe, on='Region')
+#mapdataframe = df_selection_CS.groupby(by=['Region'])['Traffic_Erl'].sum()
+#containerdataframe = pd.read_excel(df,'cs per region',usecols=['Region','latitude','longitude'])
+#containerdataframe = containerdataframe.drop_duplicates('Region').reset_index(drop=True)
+#map_df= pd.merge(mapdataframe,containerdataframe, on='Region')
 
 
 #adding circles
-for region in map_df.itertuples():
-    local_deformation = math.cos(region.latitude*math.pi/180)
-    folium.Circle(
-        location = [region.latitude, region.longitude],
-        popup= '%s (%.1f)' % (region.Region, region.Traffic_Erl),
-        radius= math.sqrt(region.Traffic_Erl)*30,
-        color='purple',
-        fill = True
-    ).add_to(m)
+#for region in map_df.itertuples():
+#    local_deformation = math.cos(region.latitude*math.pi/180)
+#    folium.Circle(
+#        location = [region.latitude, region.longitude],
+#        popup= '%s (%.1f)' % (region.Region, region.Traffic_Erl),
+#        radius= math.sqrt(region.Traffic_Erl)*30,
+#        color='purple',
+#        fill = True
+#    ).add_to(m)
 
 #map title
-m.get_root().html.add_child(folium.Element("<h3 align='center' color='black'>Voice traffic Map per Region</h3>"))
+#m.get_root().html.add_child(folium.Element("<h3 align='center' color='black'>Voice traffic Map per Region</h3>"))
 
-m
+#m
 
 
 
